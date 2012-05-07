@@ -7,8 +7,9 @@ describe ApplicationHelper do
       full_title("foo").should =~ /foo/
     end
 
-    it "should include the base title" do
+    it "should always include the base title" do
       full_title("foo").should =~ /^Rails Template/
+      full_title("").should =~ /^Rails Template/
     end
 
     it "should not include a bar for the home page" do

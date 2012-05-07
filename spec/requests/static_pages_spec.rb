@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include ApplicationHelper
+
 describe "Static pages" do
 
   subject { page }
