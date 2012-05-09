@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-include ApplicationHelper
-
 describe "Static pages" do
 
   subject { page }
@@ -46,5 +44,7 @@ describe "Static pages" do
     click_link "Home"
     page.should have_selector 'title', text: full_title
     page.should_not have_selector 'title', text: '| Home'
+    click_link "Sign up now!"
+    page.should have_selector 'title', text: full_title('Sign Up')
   end
 end
