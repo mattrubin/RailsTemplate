@@ -5,6 +5,7 @@
     </div>
     <ul>
     <% @user.errors.full_messages.each do |msg| %>
+      <% next if msg.include? "Password digest" # hackish way to hide error messages we can't delete %>
       <li><%= msg %></li>
     <% end %>
     </ul>
