@@ -15,10 +15,18 @@ describe "Authentication" do
     before { visit signin_path }
     
     describe "with invalid information" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        fill_in "Email",        with: user.email
+        check "Remember Me"
+        click_button "Sign in"
+      end
       before { click_button "Sign in" }
       
       it { should have_selector('title', text: 'Sign in') }
       it { should have_selector('div.alert.alert-error', text: 'Invalid') }
+      it { should have_field('Email', :with => user.email)}
+      specify { find_field('Remember Me').should be_checked}
       
       describe "after visiting another page" do
         before { click_link "Home" }

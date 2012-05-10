@@ -6,7 +6,7 @@
     <%= form_for(:session, url: sessions_path) do |f| %>
 
       <%= f.label :email %>
-      <%= f.text_field :email %>
+      <%= f.text_field :email, value: (params[:session][:email] if params[:session]) %>
 
       <%= f.label :password %>
       <%= f.password_field :password %>
