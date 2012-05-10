@@ -13,6 +13,12 @@ def valid_signin(user)
   cookies[:remember_token] = user.remember_token
 end
 
+def sign_in(user)
+  visit signin_path
+  valid_signin user
+end
+
+
 def invalid_signin(user)
   user.email = nil
   valid_signin(user)
