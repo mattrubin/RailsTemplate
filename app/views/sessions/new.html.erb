@@ -3,20 +3,20 @@
 
 <div class="row">
   <div class="span6 offset3">
-    <%= form_for(:session, url: sessions_path) do |f| %>
+    <%= form_tag sessions_path do %>
 
-      <%= f.label :email %>
-      <%= f.text_field :email, value: (params[:session][:email] if params[:session]) %>
+      <%= label_tag :email %>
+      <%= text_field_tag :email, params[:email] %>
 
-      <%= f.label :password %>
-      <%= f.password_field :password %>
+      <%= label_tag :password %>
+      <%= password_field_tag :password %>
 
       <label class="checkbox">
         <%= check_box_tag :remember_me, 1, params[:remember_me] %>
 	    Remember Me
       </label>
       
-      <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
+      <%= submit_tag "Sign in", class: "btn btn-large btn-primary" %>
     <% end %>
 
     <p>New user? <%= link_to "Sign up now!", signup_path %></p>
