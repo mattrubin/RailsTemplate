@@ -23,6 +23,11 @@ describe "Authentication" do
       it { should have_field('Email', :with => user.email) }
       specify { find_field('Remember Me').should be_checked }
       
+      it { should_not have_link('Profile', href: user_path(user)) }
+      it { should_not have_link('Settings', href: edit_user_path(user)) }
+      it { should_not have_link('Sign out', href: signout_path) }
+      it { should have_link('Sign in', href: signin_path) }
+      
       describe "after visiting another page" do
         before { click_link "Home" }
         it { should_not have_error_message }
