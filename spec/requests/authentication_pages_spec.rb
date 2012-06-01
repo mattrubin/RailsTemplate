@@ -105,5 +105,21 @@ describe "Authentication" do
         specify { response.should redirect_to(root_path) }
       end
     end
+    
+    describe "for signed-in users" do
+      create_user
+      before { sign_in user }
+
+      describe "visiting Users#new page" do
+        before { visit signup_path }
+        specify { current_url.should == root_url }
+      end
+
+      describe "submitting a POST request to the Users#create action" do
+        before { post users_path }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+    
   end
 end

@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :signed_in_user, only: [:edit, :update]
   before_filter :correct_user,   only: [:edit, :update]
+  before_filter :not_a_user,     only: [:new, :create]
   
   def show
     @user = User.find(params[:id])
@@ -47,4 +48,11 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
       redirect_to(root_path) unless current_user?(@user)
     end
+    
+    def not_a_user
+      if signed_in?
+        redirect_to root_path
+      end
+    end
+
 end
