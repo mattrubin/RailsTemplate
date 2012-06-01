@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_filter :not_a_user,     only: [:new, :create]
   
   def index
-    @users = User.all
+    @users = User.paginate(page: params[:page])
   end
   
   def show
