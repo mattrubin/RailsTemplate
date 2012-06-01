@@ -23,7 +23,8 @@ describe "Authentication" do
       it { should have_field('Email', :with => user.email) }
       specify { find_field('Remember Me').should be_checked }
       
-      it { should_not have_link('Profile', href: user_path(user)) }
+      it { should_not have_link('Users',    href: users_path) }
+      it { should_not have_link('Profile',  href: user_path(user)) }
       it { should_not have_link('Settings', href: edit_user_path(user)) }
       it { should_not have_link('Sign out', href: signout_path) }
       it { should have_link('Sign in', href: signin_path) }
@@ -141,6 +142,35 @@ describe "Authentication" do
         specify { response.should redirect_to(root_path) }
       end
     end
+    
+    describe "as non-admin user" do
+      create_user
+      let(:non_admin) { FactoryGirl.create(:user) }
+
+      before { sign_in non_admin }
+
+      describe "submitting a DELETE request to the Users#destroy action" do
+        before { delete user_path(user) }
+        specify { response.should redirect_to(root_path) }        
+      end
+    end
+    
+    describe "as admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      before { sign_in admin }
+
+      describe "attempting to DELETE self" do
+        specify "should redirect to root" do
+          delete user_path(admin)
+          response.should redirect_to(root_path)
+        end
+        it "should not be possible" do
+          expect { delete user_path(admin) }.not_to change(User, :count)
+        end
+     
+      end
+    end
+
     
   end
 end
