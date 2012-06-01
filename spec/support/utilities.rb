@@ -9,7 +9,15 @@ def valid_signin(user)
   fill_in "Password", with: user.password
   check "Remember Me"
   click_button "Sign in"
+  # Sign in when not using Capybara as well.
+  cookies[:remember_token] = user.remember_token
 end
+
+def sign_in(user)
+  visit signin_path
+  valid_signin user
+end
+
 
 def invalid_signin(user)
   user.email = nil
@@ -25,6 +33,12 @@ end
 RSpec::Matchers.define :have_success_message do |message|
   match do |page|
     page.should have_selector('div.alert.alert-success', text: message)
+  end
+end
+
+RSpec::Matchers.define :have_notice_message do |message|
+  match do |page|
+    page.should have_selector('div.alert.alert-notice', text: message)
   end
 end
 
