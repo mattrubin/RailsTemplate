@@ -11,6 +11,10 @@ describe "Static pages" do
     it { should have_full_title }
     it { should_not have_title '| Home' }
 
+    describe "for signed-out users" do
+      it { should have_link("Sign up") }
+    end
+
     describe "for signed-in users" do
       create_user
       before do
