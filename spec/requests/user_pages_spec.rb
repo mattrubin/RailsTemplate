@@ -65,6 +65,19 @@ describe "User pages" do
       it { should have_content(p2.content) }
       it { should have_content(user.posts.count) }
     end
+
+    it "should paginate the user's posts" do
+      50.times do
+        user.posts.create!(:content => "Foo bar")
+      end
+      visit user_path(user)
+      page.should have_selector("div.pagination")
+      page.should have_selector("li.previous_page.disabled", :content => "Previous")
+      page.should have_selector("a", :href => user_path(user)+"?page=2",
+                                     :content => "2")
+      page.should have_selector("a", :href => user_path(user)+"?page=2",
+                                     :content => "Next")
+    end
   end
 
   describe "signup page" do
