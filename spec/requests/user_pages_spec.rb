@@ -78,6 +78,36 @@ describe "User pages" do
       page.should have_selector("a", :href => user_path(user)+"?page=2",
                                      :content => "Next")
     end
+
+    describe "as a non-signed-in user" do
+      it "should not show delete links" do
+        visit user_path(user)
+        page.should_not have_link("delete", :href => post_path(p1))
+        page.should_not have_link("delete", :href => post_path(p2))
+      end
+    end
+
+    describe "as a signed-in user" do
+
+      before(:each) { sign_in user }
+
+      it "should show delete links" do
+        visit user_path(user)
+        page.should have_link("delete", :href => post_path(p1))
+        page.should have_link("delete", :href => post_path(p2))
+      end
+
+      it "should not show other users' delete links" do
+        wrong_user = FactoryGirl.create(:user, :email => "wrong_user@example.com")
+        w1 = FactoryGirl.create(:post, user: wrong_user, content: "Lorem")
+        w2 = FactoryGirl.create(:post, user: wrong_user, content: "Ipsum")
+
+        visit user_path(wrong_user)
+        page.should_not have_link("delete", :href => post_path(w1))
+        page.should_not have_link("delete", :href => post_path(w2))
+      end
+
+    end
   end
 
   describe "signup page" do
