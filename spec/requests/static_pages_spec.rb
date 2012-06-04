@@ -14,16 +14,28 @@ describe "Static pages" do
     describe "for signed-in users" do
       create_user
       before do
-        FactoryGirl.create(:post, user: user, content: "Lorem ipsum")
-        FactoryGirl.create(:post, user: user, content: "Dolor sit amet")
         sign_in user
-        visit root_path
       end
 
       it "should render the user's feed" do
+        FactoryGirl.create(:post, user: user, content: "Lorem ipsum")
+        FactoryGirl.create(:post, user: user, content: "Dolor sit amet")
+        visit root_path
+
         user.feed.each do |item|
           page.should have_selector("li##{item.id}", text: item.content)
         end
+      end
+
+      it "should show pluralized post count" do
+        visit root_path
+        page.should have_selector("span", :content => user.posts.count.to_s+" posts")
+        FactoryGirl.create(:post, user: user, content: "Lorem ipsum")
+        visit root_path
+        page.should have_selector("span", :content => user.posts.count.to_s+" post")
+        FactoryGirl.create(:post, user: user, content: "Dolor sit amet")
+        visit root_path
+        page.should have_selector("span", :content => user.posts.count.to_s+" posts")
       end
     end
   end
