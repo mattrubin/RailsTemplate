@@ -5,7 +5,7 @@
   </span>
   <span class="content"><%= feed_item.content %></span>
   <span class="timestamp">
-    Posted <%= time_ago_in_words(feed_item.created_at) %> ago.
+    Posted <%= time_ago(feed_item.created_at) %>.
   </span>
   <%= render 'shared/delete_link', item: feed_item %>
 </li>
