@@ -52,10 +52,62 @@ describe "User pages" do
 
   describe "profile page" do
     create_user
+    let!(:p1) { FactoryGirl.create(:post, user: user, content: "Foo") }
+    let!(:p2) { FactoryGirl.create(:post, user: user, content: "Bar") }
+
     before { visit user_path(user) }
 
     it { should have_heading user.name }
     it { should have_title   user.name }
+
+    describe "posts" do
+      it { should have_content(p1.content) }
+      it { should have_content(p2.content) }
+      it { should have_content(user.posts.count) }
+    end
+
+    it "should paginate the user's posts" do
+      50.times do
+        user.posts.create!(:content => "Foo bar")
+      end
+      visit user_path(user)
+      page.should have_selector("div.pagination")
+      page.should have_selector("li.previous_page.disabled", :content => "Previous")
+      page.should have_selector("a", :href => user_path(user)+"?page=2",
+                                     :content => "2")
+      page.should have_selector("a", :href => user_path(user)+"?page=2",
+                                     :content => "Next")
+    end
+
+    describe "as a non-signed-in user" do
+      it "should not show delete links" do
+        visit user_path(user)
+        page.should_not have_link("delete", :href => post_path(p1))
+        page.should_not have_link("delete", :href => post_path(p2))
+      end
+    end
+
+    describe "as a signed-in user" do
+
+      before(:each) { sign_in user }
+
+      it "should show delete links" do
+        visit user_path(user)
+        page.should have_link("delete", :href => post_path(p1))
+        page.should have_link("delete", :href => post_path(p2))
+      end
+
+      it "should not show other users' delete links" do
+        wrong_user = FactoryGirl.create(:user, :email => "wrong_user@example.com")
+        w1 = FactoryGirl.create(:post, user: wrong_user, content: "Lorem")
+        w2 = FactoryGirl.create(:post, user: wrong_user, content: "Ipsum")
+
+        visit user_path(wrong_user)
+        page.should_not have_link("delete", :href => post_path(w1))
+        page.should_not have_link("delete", :href => post_path(w2))
+      end
+
+    end
   end
 
   describe "signup page" do

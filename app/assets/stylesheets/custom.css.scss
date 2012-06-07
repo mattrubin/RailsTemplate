@@ -192,3 +192,38 @@ input, textarea, select, .uneditable-input {
     }
   }
 }
+
+
+
+/* posts */
+
+.posts {
+  list-style: none;
+  margin: 10px 0 0 0;
+
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+    word-wrap: break-word;
+  }
+}
+.content {
+  display: block;
+}
+.timestamp {
+  color: $grayLight;
+}
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+aside {
+  textarea {
+    height: 100px;
+    margin-bottom: 5px;
+  }
+  #post_countdown {
+    float: right;
+    margin-top: 5px
+  }
+}

@@ -1,0 +1,7 @@
+<li>
+  <span class="content"><%= post.content %></span>
+  <span class="timestamp">
+    Posted <%= time_ago(post.created_at) %>.
+  </span>
+  <%= render 'shared/delete_link', item: post %>
+</li>

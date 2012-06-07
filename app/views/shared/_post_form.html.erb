@@ -1,0 +1,31 @@
+<script type="text/javascript">
+  function textCountdown(field, counter, max) {
+    // update 'characters left' counter
+    $(counter).text(max - $(field).val().length);
+
+    // update color
+    if ($(field).val().length > max) {
+      $(counter).css("color", "Red");
+    } else if ($(field).val().length > max*.9) {
+      $(counter).css("color", "DarkRed");
+    } else if ($(field).val().length > max*.8) {
+      $(counter).css("color", "Chocolate");
+    } else {
+      $(counter).css("color", "");
+    }
+  }
+</script>
+
+<%= form_for(@post) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+    <%= f.text_area :content, placeholder: "Compose new post...",
+                              onkeyup:     "textCountdown('#post_content', '#post_countdown', #{Post::MAX_LENGTH});",
+                              onkeydown:   "textCountdown('#post_content', '#post_countdown', #{Post::MAX_LENGTH});"%>
+  </div>
+  <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+
+  <span id="post_countdown">
+    <%= (@post.content.nil?) ? Post::MAX_LENGTH : Post::MAX_LENGTH-@post.content.length %>
+  </span>
+<% end %>
